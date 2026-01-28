@@ -1,5 +1,5 @@
 variable "location" {
-  default = "East US"
+  default = "uksouth"
 }
 
 variable "resource_group_name" {
