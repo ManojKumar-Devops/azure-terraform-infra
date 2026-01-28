@@ -1,36 +1,24 @@
-############################
-# Resource Group
-############################
 resource "azurerm_resource_group" "rg" {
   name     = "manoj-rg-terraform-demo"
-  location = var.location
+  location = "centralindia"
 }
 
-############################
-# Virtual Network
-############################
 resource "azurerm_virtual_network" "vnet" {
-  name                = "manoj-demo-vnet"
+  name                = "demo-vnet"
+  address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  address_space       = ["10.0.0.0/16"]
 }
 
-############################
-# Subnet
-############################
 resource "azurerm_subnet" "subnet" {
-  name                 = "manoj-demo-subnet"
+  name                 = "demo-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-############################
-# Network Security Group
-############################
 resource "azurerm_network_security_group" "nsg" {
-  name                = "manoj-demo-nsg"
+  name                = "demo-nsg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -47,21 +35,16 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
-############################
-# NSG Association with Subnet
-############################
 resource "azurerm_subnet_network_security_group_association" "nsg_assoc" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
-############################
-# Public IP
-############################
 resource "azurerm_public_ip" "pip" {
-  name                = "manoj-demo-pip"
+  name                = "demo-pip"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
+<<<<<<< HEAD
 
   allocation_method = "Static"
   sku               = "Standard"
@@ -71,8 +54,14 @@ resource "azurerm_public_ip" "pip" {
 ############################
 # Network Interface
 ############################
+=======
+  allocation_method   = "Static"
+  sku                 = "Basic"
+}
+
+>>>>>>> 425cb08 ("need to change Terraform file")
 resource "azurerm_network_interface" "nic" {
-  name                = "manoj-demo-nic"
+  name                = "demo-nic"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -84,22 +73,19 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
-############################
-# Linux Virtual Machine
-############################
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "manoj-demo-vm"
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "demo-vm"
   location            = azurerm_resource_group.rg.location
-  size                = var.vm_size
-  admin_username      = var.vm_admin_username
+  resource_group_name = azurerm_resource_group.rg.name
+  size                = "Standard_B1s"   # PAYG-safe in India
+  admin_username      = "azureuser"
 
   network_interface_ids = [
     azurerm_network_interface.nic.id
   ]
 
   admin_ssh_key {
-    username   = var.vm_admin_username
+    username   = "azureuser"
     public_key = file("~/.ssh/id_rsa.pub")
   }
 

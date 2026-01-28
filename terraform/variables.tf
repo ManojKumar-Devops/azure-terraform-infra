@@ -1,5 +1,9 @@
 variable "location" {
+<<<<<<< HEAD
   default = "uksouth"
+=======
+  default = "westus2"
+>>>>>>> 425cb08 ("need to change Terraform file")
 }
 
 variable "resource_group_name" {
@@ -11,5 +15,6 @@ variable "vm_admin_username" {
 }
 
 variable "vm_size" {
-  default = "Standard_B1s"
+  default = "Standard_D2s_v3"  # more general-purpose, high availability
 }
+
