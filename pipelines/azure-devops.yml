@@ -1,0 +1,31 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: '1.6.6'
+
+- script: terraform init
+  displayName: Terraform Init
+  workingDirectory: infra
+
+- script: terraform validate
+  displayName: Terraform Validate
+  workingDirectory: infra
+
+- script: terraform plan
+  displayName: Terraform Plan
+  workingDirectory: infra
+  env:
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+    ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+    ARM_TENANT_ID: $(ARM_TENANT_ID)
+    ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+
+- script: terraform apply -auto-approve
+  displayName: Terraform Apply
+  workingDirectory: infra
