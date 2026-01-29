@@ -9,5 +9,5 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  default = "kk-playground-rg"
+  default = "kml_rg_main-115e10bf105347dc"
 }
